@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import os  # Added for directory creation
@@ -22,11 +23,11 @@ def main():
     os.makedirs(log_dir, exist_ok=True)
     
     # Load data from CSV
-   full_data = pd.read_csv('historical_data.csv')
-   full_data['timestamp'] = pd.to_datetime(full_data['timestamp'])
+    full_data = pd.read_csv('historical_data.csv')
+    full_data['timestamp'] = pd.to_datetime(full_data['timestamp'])
    
-   # Print the first few rows to verify
-   print("Data Loaded:\n", full_data.head())
+    # Print the first few rows to verify
+    print("Data Loaded:\n", full_data.head())
 
     train_data = full_data.iloc[:int(len(full_data)*0.8)]
     test_data = full_data.iloc[int(len(full_data)*0.8):]
