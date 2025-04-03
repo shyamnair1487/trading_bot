@@ -27,6 +27,7 @@ class DQNAgent:
     def _build_model(self):
         """GPU-optimized model architecture"""
         model = tf.keras.Sequential([
+            Input(shape=(self.state_size,))
             layers.Dense(512, activation='relu', input_shape=(self.state_size,)),
             layers.BatchNormalization(),
             layers.Dense(512, activation='relu'),
