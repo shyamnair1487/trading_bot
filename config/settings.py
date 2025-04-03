@@ -8,6 +8,7 @@ class Settings:
     MEMORY_SIZE: int = 10000         # Replay buffer capacity
     GAMMA: float = 0.99              # Discount factor
     EPS_START: float = 1.0           # Initial exploration rate
+    EPS_MIN = 0.01  # Minimum exploration rate
     EPS_END: float = 0.01            # Minimum exploration rate
     EPS_DECAY: float = 0.995         # Exploration decay rate
     TAU: float = 0.005               # Target network update rate
