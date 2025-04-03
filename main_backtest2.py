@@ -6,7 +6,7 @@ from environments.backtest_env import BacktestEnvironment
 from models.q_network import DQNAgent
 from utils.data_fetcher import fetch_historical_data
 from config.settings import settings
-
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'  # Enable all logs
 import tensorflow as tf
 
 # Configure GPU memory growth and mixed precision
@@ -18,9 +18,16 @@ if physical_devices:
 def main():
     # Ensure models directory exists
     os.makedirs('models', exist_ok=True)
+    log_dir = os.path.dirname(settings.LOG_PATH)
+    os.makedirs(log_dir, exist_ok=True)
     
-    # Load and split data
-    full_data = fetch_historical_data(settings.SYMBOL, settings.TIMEFRAME)
+    # Load data from CSV
+   full_data = pd.read_csv('historical_data.csv')
+   full_data['timestamp'] = pd.to_datetime(full_data['timestamp'])
+   
+   # Print the first few rows to verify
+   print("Data Loaded:\n", full_data.head())
+
     train_data = full_data.iloc[:int(len(full_data)*0.8)]
     test_data = full_data.iloc[int(len(full_data)*0.8):]
     
