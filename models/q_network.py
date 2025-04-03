@@ -10,23 +10,24 @@ class DQNAgent:
     def __init__(self, state_size, action_size):
         self.state_size = state_size
         self.action_size = action_size
-        self.memory = ReplayBuffer(settings.MEMORY_SIZE)
-        self.gamma = settings.GAMMA  # Discount factor
-        self.epsilon = settings.EPS_START  # Exploration rate
-        self.epsilon_min = settings.EPS_END
-        self.epsilon_decay = settings.EPS_DECAY
         
-        # Neural Networks
-        self.model = self._build_model()
-        self.target_model = self._build_model()
-        self.target_model.set_weights(self.model.get_weights())
+        # GPU Strategy Scope ▼
+        self.strategy = tf.distribute.MirroredStrategy()
+        with self.strategy.scope():
+            self.model = self._build_model()
+            self.target_model = self._build_model()
+            self.target_model.set_weights(self.model.get_weights())
+        
+        self.memory = ReplayBuffer(settings.MEMORY_SIZE)
+        self.gamma = settings.GAMMA
+        self.epsilon = settings.EPS_START
 
     def _build_model(self):
-        """Construct neural network architecture"""
+        """GPU-optimized model architecture"""
         model = tf.keras.Sequential([
-            layers.Dense(64, activation='relu', input_shape=(self.state_size,)),
+            layers.Dense(512, activation='relu', input_shape=(self.state_size,)),
             layers.BatchNormalization(),
-            layers.Dense(64, activation='relu'),
+            layers.Dense(512, activation='relu'),
             layers.Dense(self.action_size)
         ])
         model.compile(optimizer=optimizers.Adam(learning_rate=0.001), loss='mse')
