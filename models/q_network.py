@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras import layers, optimizers
+from tensorflow.keras import layers, optimizers, Input
 from utils.memory import ReplayBuffer
 from config.settings import settings
 
@@ -21,6 +21,8 @@ class DQNAgent:
         self.memory = ReplayBuffer(settings.MEMORY_SIZE)
         self.gamma = settings.GAMMA
         self.epsilon = settings.EPS_START
+        self.epsilon_min = settings.EPS_MIN  # Add this line
+        self.epsilon_decay = settings.EPS_DECAY
 
     def _build_model(self):
         """GPU-optimized model architecture"""
