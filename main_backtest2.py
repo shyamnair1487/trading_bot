@@ -7,6 +7,14 @@ from models.q_network import DQNAgent
 from utils.data_fetcher import fetch_historical_data
 from config.settings import settings
 
+import tensorflow as tf
+
+# Configure GPU memory growth and mixed precision
+physical_devices = tf.config.list_physical_devices('GPU')
+if physical_devices:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    tf.keras.mixed_precision.set_global_policy('mixed_float16')
+
 def main():
     # Ensure models directory exists
     os.makedirs('models', exist_ok=True)
